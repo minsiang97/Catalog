@@ -127,7 +127,7 @@ const Complete = ({ navigation }) => {
             onChangeText={onChangeText}
             removeText={removeText}
         />
-        <Text style={styles.sectionTitle}>Top Airing</Text>
+        <Text style={styles.sectionTitle}>Completed</Text>
         {animeListToDisplay?.length > 0 ?
             <>
             <FlatList

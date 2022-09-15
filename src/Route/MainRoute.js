@@ -7,6 +7,7 @@ import Complete from "../Screen/AnimeListing/Complete"
 import Upcoming from "../Screen/AnimeListing/Upcoming"
 import { NavigationContainer } from "@react-navigation/native"
 import Header from '../Component/Header'
+import Favourites from "../Screen/Favourites/Favourites"
 
 const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
@@ -44,7 +45,14 @@ const DrawerStack = () => {
                 options={{
                     headerTitle: '', 
                     header: props => <Header openDrawer={props.navigation}/>
-                }} name="Anime Listing" component={TabStack} />
+                }} name="Home" component={TabStack} 
+            />
+            <Drawer.Screen 
+                options={{
+                    headerTitle: '', 
+                    header: props => <Header openDrawer={props.navigation}/>
+                }} name="Favourites" component={Favourites} 
+            />
         </Drawer.Navigator>
     )
     

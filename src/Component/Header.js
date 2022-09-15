@@ -9,12 +9,12 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 
 const Header = ({openDrawer}) => {
   return (
-    <View>
+    <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            width: '20%',
+            width: SCREEN_WIDTH / 3,
+            paddingLeft: 10,
+            flex: 1,
           }}>
           <TouchableOpacity onPress={() => openDrawer.openDrawer()}>
             <Image
@@ -27,6 +27,16 @@ const Header = ({openDrawer}) => {
             />
           </TouchableOpacity>
         </View>
+        <View
+            style={{
+                width: SCREEN_WIDTH / 3,
+                flex: 1,
+            }}
+        >
+            <Text style={{fontWeight: 'bold', fontSize:18, alignSelf: 'center'}}>MyAnime</Text>
+        </View>
+        <View style={{width: SCREEN_WIDTH / 3}}/>
+        <View/>
     </View>
   );
 };

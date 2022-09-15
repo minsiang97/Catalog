@@ -127,7 +127,7 @@ const Upcoming = ({ navigation }) => {
             onChangeText={onChangeText}
             removeText={removeText}
         />
-        <Text style={styles.sectionTitle}>Top Airing</Text>
+        <Text style={styles.sectionTitle}>Upcoming Shows</Text>
         {animeListToDisplay?.length > 0 ?
             <>
             <FlatList

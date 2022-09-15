@@ -144,6 +144,8 @@ const Complete = ({ navigation }) => {
                         score={item.score}
                         year={item.year}
                         image_url={item.images.jpg.image_url}
+                        navigation={navigation}
+                        pickedData={item}
                         />
                     )
                 }}

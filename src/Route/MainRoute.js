@@ -8,6 +8,12 @@ import Upcoming from "../Screen/AnimeListing/Upcoming"
 import { NavigationContainer } from "@react-navigation/native"
 import Header from '../Component/Header'
 import Favourites from "../Screen/Favourites/Favourites"
+import Details from "../Screen/Details/Details"
+import FeatherIcon from 'react-native-vector-icons/Feather'
+import { View, Text, Dimensions } from 'react-native'
+
+const SCREEN_WIDTH = Dimensions.get('window').width
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
@@ -27,6 +33,19 @@ const MainRoute = () => {
                 name='DrawerStack'
                 component={DrawerStack}
                 options={{headerShown: false}}
+                />
+
+                <Stack.Screen
+                name='Favourites'
+                component={Favourites}
+                options={{headerShown: false}}
+                />
+                <Stack.Screen
+                name='Details'
+                component={Details}
+                options={{
+                    headerTitle: 'MyAnime',
+                  }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import { Button, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign'
 
-const CardView = ({ name, rating, score, year, image_url }) => {
+const CardView = ({ name, rating, score, year, image_url, navigation, pickedData }) => {
     
   return (
     
     <TouchableOpacity 
         style={styles.cardView}
+        onPress={() => navigation.navigate('Details', {pickedData})}
     >
         <View style={{flex: 0.3}}>
             <Image

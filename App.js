@@ -27,6 +27,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import MainRoute from './src/Route/MainRoute';
 import 'react-native-gesture-handler';
+import {Provider} from 'react-redux'
+import store from './src/redux/store'
 
 
 const App: () => Node = () => {
@@ -38,14 +40,16 @@ const App: () => Node = () => {
 
   return (
     <>
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      
-    </SafeAreaView>
-    <MainRoute/>
+    <Provider store={store}>
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        
+      </SafeAreaView>
+      <MainRoute/>
+    </Provider>
     </>
   );
 };

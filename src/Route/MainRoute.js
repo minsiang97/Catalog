@@ -37,8 +37,7 @@ const DrawerStack = () => {
         <Drawer.Navigator
         initialRouteName="Anime Listing"
         screenOptions={{
-            swipeEnabled: true,
-
+            activeTintColor: '#FF934B'
         }}
         >
             <Drawer.Screen 

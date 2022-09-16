@@ -90,7 +90,7 @@ project.ext.vectoricons = [
     'EvilIcons.ttf', 
     "AntDesign.ttf", 
     "Entypo.ttf", 
-    "Feather.ttf"
+    "Feather.ttf",
     "FontAwesome.ttf",
     "FontAwesome5_Brands.ttf",
     "FontAwesome5_Regular.ttf",

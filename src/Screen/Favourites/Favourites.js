@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { filterFromFavourites } from '../../redux/actions/Favourites'
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import CardView2 from '../../Component/CardView2'
+import { useIsFocused } from '@react-navigation/native';
 
 const Favourites = ({navigation, route}) => {
-    const [searchContent, setSearchContent] = useState(null)
-    const [favouritesList, setFavouritesList] = useState(null)
     const dispatch = useDispatch()
     const favourites = useSelector(state => state.favourites.data)
-    
+    const [searchContent, setSearchContent] = useState(null)
+    const [favouritesList, setFavouritesList] = useState([])
+    const isFocused = useIsFocused()
     const onChangeText = (value) => {
         setSearchContent(value)
     }
@@ -22,14 +23,14 @@ const Favourites = ({navigation, route}) => {
 
     useEffect(() => {
         setFavouritesList(favourites)
-    },[])
+    },[isFocused])
 
     useEffect(() => {
 
         if ( searchContent && searchContent.length > 0){
             const filteredArr = favouritesList.filter((item) => (item.title.toLowerCase()).includes(searchContent.toLowerCase()))
             dispatch(filterFromFavourites(filteredArr))
-        } else if (searchContent !== null) {
+        } else if (searchContent == "") {
             dispatch(filterFromFavourites(favouritesList))         
         }
     },[searchContent])
@@ -46,16 +47,7 @@ const Favourites = ({navigation, route}) => {
             data={favourites}
             numColumns={2}
             style={{marginHorizontal: 20}}
-            columnWrapperStyle={
-                favourites.length > 1 ?
-                {
-                    justifyContent:  'space-around'
-                }
-                :
-                {
-                    justifyContent: 'flex-start',
-                }
-            }
+            // contentContainerStyle={favourites.length > 1 ? {flexWrap: 'wrap'} : null}
             keyExtractor={(item, index) => item.mal_id}
             renderItem={({item, index}) => {
                 return (
@@ -73,11 +65,19 @@ const Favourites = ({navigation, route}) => {
             }}
             />
             : 
+            <>
+            {searchContent ? 
+            <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
+                <Text>No data available</Text>
+            </View>
+            :
             <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
                 <Text>You haven't added any item into Favourites.</Text>
                 <Text style={{marginTop: 10}}>Click here to browse a list of Anime</Text>
                 <Button title="Click Here" style={{marginTop: 10}} onPress={() => navigation.navigate('Home', { screen: 'Airing' })}/>
             </View>
+            }
+            </>
             }
         </SafeAreaView>
        

@@ -16,13 +16,15 @@ const CardView2 = ({ title, rating, score, year, image_url, navigation, pickedDa
         style={styles.image}
         resizeMode={'cover'}
         />
-        <Text style={[styles.name, {fontWeight: 'bold', fontSize: 16}]}>{title}</Text>
-        <Text style={styles.name}>{rating}</Text>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
-            <AntIcon name="star" color={'#fcd303'} size={20}/>
-            <Text style={{marginLeft: 10, paddingTop: 2}}>{score ? score : 0}</Text>
+        <View style={{justifyContent: 'center', alignItems: 'center', alignSelf: 'center', flex: 1}}>
+            <Text style={[styles.name, {fontWeight: 'bold', fontSize: 16}]}>{title}</Text>
+            <Text style={styles.name}>{rating}</Text>
+            <View style={{flexDirection: 'row', marginTop: 10}}>
+                <AntIcon name="star" color={'#fcd303'} size={20}/>
+                <Text style={{marginLeft: 10, paddingTop: 2}}>{score ? score : 0}</Text>
+            </View>
+            <Text style={styles.name}>Year : {year ? year : 'N/A'}</Text>
         </View>
-        <Text style={styles.name}>Year : {year ? year : 'N/A'}</Text>
     </TouchableOpacity>
   );
 }
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 1, height: 4},
         padding: 20,
         paddingHorizontal: 10,
-        width: '45%'
+        width: '45%',
     },
     image: {
         width: '100%',

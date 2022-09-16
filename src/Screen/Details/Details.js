@@ -61,15 +61,17 @@ const Details = ({navigation,route}) => {
                     />
                 </View>
                 <View style={styles.details}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 30}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 30}}>
                         <View style={{flex: 0.8}}>
                             <Text style={styles.title}>{pickedData.title}</Text>
                             <View style={styles.genreContainer}>
-                                {pickedData.genres.map((item, index) => {
-                                    return (
-                                        <Text style={styles.genreText}>{item.name}{index == (pickedData.genres.length - 1 )? "" : "," } </Text>
-                                    )
-                                })}
+                                
+                                        <Text style={styles.genreText}>
+                                            {pickedData.genres.map((item, index) => {
+                                                return item.name  + (index == (pickedData.genres.length - 1 )? '' : ', ')
+                                            })}
+                                        </Text>
+                                    
                             </View>
                             <Text style={{marginBottom: 10}}>{pickedData.rating}</Text>
                         </View>
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     genreContainer: {
+        flex: 0.7, 
         flexDirection: 'row',
         marginVertical: 10,
     },

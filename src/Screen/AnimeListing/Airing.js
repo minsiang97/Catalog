@@ -79,10 +79,15 @@ const Airing = ({ navigation }) => {
 
     const renderEmpty = () => {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>Sorry, there are no data available</Text>
-                <Button title="Refresh" onPress={getData}/>
-            </View>
+            <>
+            {listLoading ? 
+                null
+            :
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text>Sorry, there are no data available</Text>
+                </View>
+            }
+            </>
         )
         
     }
@@ -117,24 +122,21 @@ const Airing = ({ navigation }) => {
     
   return (
     <SafeAreaView style={styles.container}>
-        <LoadingSpinnerComponent
-            visible={loadingSpinner}
-            textContent={'Loading...'}
-            textStyle={{color: '#FFF'}}
-        />
         <SearchBar
             text={searchContent}
             onChangeText={onChangeText}
             removeText={removeText}
         />
         <Text style={styles.sectionTitle}>Top Airing</Text>
-        {animeListToDisplay?.length > 0 ?
+        {!loadingSpinner ?
             <>
             <FlatList
                 data={animeListToDisplay}
+                contentContainerStyle={{ flexGrow: 1 }}
                 keyExtractor={(item, id) => item.mal_id}
                 onEndReachedThreshold={0.2}
                 onEndReached={getMoreData}
+                ListEmptyComponent={renderEmpty}
                 ListFooterComponent={renderFooter}
                 renderItem={({item, index}) => {
                     return (
@@ -146,6 +148,7 @@ const Airing = ({ navigation }) => {
                         image_url={item.images.jpg.image_url}
                         navigation={navigation}
                         pickedData={item}
+                        index={index}
                         />
                     )
                 }}
@@ -159,7 +162,9 @@ const Airing = ({ navigation }) => {
                 </>
                :
                <>
-                {renderEmpty()}
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <ActivityIndicator size={20}/>
+                </View>
                 </>
             }
         </>

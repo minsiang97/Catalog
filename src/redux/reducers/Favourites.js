@@ -11,6 +11,17 @@ export default function Favourites(state = initialState, action){
                 data: [...state.data, action.payload.data]
             }
         
+        case type.REMOVE_FROM_FAVOURITES:
+            return {
+                data: action.payload.data
+            }
+             
+        case type.FILTER_FROM_FAVOURITES:
+            return {
+                ...state,
+                data: action.payload.data
+            }
+
         default: return state
     }
 }

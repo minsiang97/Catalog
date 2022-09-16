@@ -1,92 +1,112 @@
-import React from 'react'
-import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState, useEffect } from 'react'
+import { Animated, Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Octicons from 'react-native-vector-icons/Octicons'
+import AntIcon from 'react-native-vector-icons/AntDesign'
 import { useSelector, useDispatch } from 'react-redux';
-import { addToFavourites } from '../../redux/actions/Favourites';
+import { addToFavourites, removeFromFavourites } from '../../redux/actions/Favourites';
+import ModalView from '../../Component/Modal';
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const Details = ({navigation,route}) => {
     const { pickedData } = route.params
-   
+
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const scale = useRef(new Animated.Value(1)).current
     const dispatch = useDispatch()
     const favourites = useSelector(state => state.favourites.data)
 
+    
+
     const handleClick = () => {
         if (favourites.find((item) => item.mal_id == pickedData.mal_id) ){
-            return
+            const filteredArr = favourites.filter((item) => item.mal_id !== pickedData.mal_id)
+            dispatch(removeFromFavourites(filteredArr))
         } else {
+           
+            Animated.sequence([
+                Animated.timing(scale, {toValue: 1.5, duration: 200 , useNativeDriver: true}),
+                Animated.timing(scale, {toValue: 1, duration: 500, useNativeDriver: true})
+            ]).start();
             dispatch(addToFavourites(pickedData))
+            setModalVisible(true)
         }
     }
 
+    useEffect(() => {
+        if (modalVisible === true){
+            setTimeout(() => {
+                setModalVisible(false)
+            },800)
+        }
+    },[modalVisible])
+
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.videoContainer}>
-                <Image
-                source={{uri : pickedData.images.jpg.large_image_url}}
-                style={styles.image}
-                resizeMode={'cover'}
-                />
-            </View>
-            <View style={styles.details}>
-                <Text style={styles.title}>{pickedData.title}</Text>
-                <View style={styles.genreContainer}>
-                    {pickedData.genres.map((item, index) => {
-                        return (
-                            <Text style={styles.genreText}>{item.name}{index == (pickedData.genres.length - 1 )? "" : "," } </Text>
-                        )
-                    })}
+        <SafeAreaView style={{flex: 1}}>
+            {modalVisible ?
+            <ModalView
+            modalVisible
+            setModalVisible={setModalVisible}
+            />
+            : null}
+            <ScrollView contentContainerStyle={styles.container}>
+                <View style={styles.videoContainer}>
+                    <Image
+                    source={{uri : pickedData.images.jpg.large_image_url}}
+                    style={styles.image}
+                    resizeMode={'cover'}
+                    />
                 </View>
-                <Text style={{alignSelf: 'center', marginBottom: 10}}>{pickedData.rating}</Text>
-                <View style={[styles.genreContainer, {justifyContent: 'space-around'}]}>
-                    <View style={styles.year}>
-                        <Text style={styles.subTitle}>Year</Text>
-                        <Text style={styles.subDesc}>{pickedData.year ? pickedData.year : 'N/A'}</Text>
+                <View style={styles.details}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 30}}>
+                        <View style={{flex: 0.8}}>
+                            <Text style={styles.title}>{pickedData.title}</Text>
+                            <View style={styles.genreContainer}>
+                                {pickedData.genres.map((item, index) => {
+                                    return (
+                                        <Text style={styles.genreText}>{item.name}{index == (pickedData.genres.length - 1 )? "" : "," } </Text>
+                                    )
+                                })}
+                            </View>
+                            <Text style={{marginBottom: 10}}>{pickedData.rating}</Text>
+                        </View>
+                        
+                        <View style={{flex: 0.2, alignItems: 'flex-end'}}> 
+                            <Animated.View style={{transform: [{scale}]}}>
+                                <TouchableOpacity onPress={handleClick}>
+                                    <AntIcon  
+                                        name={favourites.find((item) => item.mal_id == pickedData.mal_id ) ? "heart" : "hearto"} 
+                                        color={favourites.find((item) => item.mal_id == pickedData.mal_id ) ? "red" : 'black'} 
+                                        size={30} 
+                                    />    
+                                </TouchableOpacity>
+                            </Animated.View> 
+                        </View>
                     </View>
-                    <View style={styles.year}>
-                        <Text style={styles.subTitle}>Rank</Text>
-                        <Text style={styles.subDesc}>{pickedData.rank ? pickedData.rank : 'N/A'}</Text>
+                    <View style={[styles.genreContainer, {justifyContent: 'space-around'}]}>
+                        <View style={styles.year}>
+                            <Text style={styles.subTitle}>Year</Text>
+                            <Text style={styles.subDesc}>{pickedData.year ? pickedData.year : 'N/A'}</Text>
+                        </View>
+                        <View style={styles.year}>
+                            <Text style={styles.subTitle}>Rank</Text>
+                            <Text style={styles.subDesc}>{pickedData.rank ? pickedData.rank : 'N/A'}</Text>
+                        </View>
+                        <View style={styles.year}>
+                            <Text style={styles.subTitle}>Score</Text>
+                            <Text style={styles.subDesc}>{pickedData.score ? pickedData.score : 0}</Text>
+                        </View>
                     </View>
-                    <View style={styles.year}>
-                        <Text style={styles.subTitle}>Score</Text>
-                        <Text style={styles.subDesc}>{pickedData.score ? pickedData.score : 0}</Text>
+                    <View style={styles.desc}>
+                        <Text style={styles.descContent}>{pickedData.synopsis}</Text>
                     </View>
                 </View>
-                <View style={styles.desc}>
-                    <Text style={styles.descContent}>{pickedData.synopsis}</Text>
-                </View>
-                <TouchableOpacity 
-                    style={
-                        favourites.find((item) => item.mal_id == pickedData.mal_id) ? 
-                        [styles.buttonContainer, {opacity: 0.5}] 
-                        : styles.buttonContainer
-                    }
-                    activeOpacity={
-                        favourites.find((item) => item.mal_id == pickedData.mal_id) ?
-                        0.5
-                        :
-                        0
-                    }
-                    onPress={handleClick}
-                >
-                    <View style={styles.buttonTextContainer}>
-                        {favourites.find((item) => item.mal_id == pickedData.mal_id) ? 
-                        <>
-                        <Octicons name="diff-added" size={25} color={'white'}/>
-                        <Text style={styles.buttonText}>ADDED INTO FAVOURITES</Text>
-                        </>
-                        :
-                        <>
-                        <Octicons name="diff-added" size={25} color={'white'}/>
-                        <Text style={styles.buttonText}>ADD TO FAVOURITES</Text>
-                        </>
-                        }
-                    </View>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+                
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
@@ -113,15 +133,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        alignSelf: 'center'
     },
     genreContainer: {
         flexDirection: 'row',
         marginVertical: 10,
-        justifyContent: 'center'
     },
     genreText: {
-        color: 'lightGray',
+        color: 'gray',
         fontStyle: 'italic'
     }, 
     year: {
@@ -163,7 +181,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 10,
         marginTop: 10
-    }
+    },
 })
 
 export default Details

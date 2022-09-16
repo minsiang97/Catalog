@@ -10,7 +10,7 @@ import Header from '../Component/Header'
 import Favourites from "../Screen/Favourites/Favourites"
 import Details from "../Screen/Details/Details"
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import { View, Text, Dimensions } from 'react-native'
+import { View, Text, Dimensions, Image } from 'react-native'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -85,17 +85,26 @@ const TabStack = () => {
             <Tab.Screen 
                 name="Airing" 
                 component={Airing} 
-                options={{headerTitle: ''}}
+                options={{
+                    headerTitle: '',
+                    tabBarIcon: props => <Image source={require('../assets/airing.png')} style={{width: 30, height: 30}}/>
+                }}
             />
             <Tab.Screen 
                 name="Complete" 
                 component={Complete} 
-                options={{headerTitle: ''}}
+                options={{
+                    headerTitle: '',
+                    tabBarIcon: props => <Image source={require('../assets/complete.png')} style={{width: 30, height: 30}}/>
+                }}
             />
             <Tab.Screen 
                 name="Upcoming" 
                 component={Upcoming} 
-                options={{headerTitle: ''}}
+                options={{
+                    headerTitle: '',
+                    tabBarIcon: props => <Image source={require('../assets/upcoming.png')} style={{width: 30, height: 30}}/>
+                }}
             />
         </Tab.Navigator>
     )
